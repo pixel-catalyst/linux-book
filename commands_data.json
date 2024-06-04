@@ -1,0 +1,106 @@
+{
+  "ls": {
+    "description": "List directory contents",
+    "arguments": {
+      "-a": "Show hidden files",
+      "-l": "Show detailed information (permissions, owner, size, etc.)",
+      "-h": "Display human-readable file sizes (e.g., KB, MB, GB)"
+    }
+  },
+  "cd": {
+    "description": "Change directory",
+    "arguments": {
+      "path": "The directory to change to (e.g., cd /home/user or cd .. to go up one level)"
+    }
+  },
+  "pwd": {
+    "description": "Print working directory",
+    "arguments": "No arguments needed."
+  },
+  "mkdir": {
+    "description": "Create directory",
+    "arguments": {
+      "directory_name": "The name of the directory to create"
+    }
+  },
+  "rmdir": {
+    "description": "Remove empty directory",
+    "arguments": {
+      "directory_name": "The name of the directory to remove"
+    }
+  },
+  "cp": {
+    "description": "Copy files or directories",
+    "arguments": {
+      "source": "The file or directory to copy",
+      "destination": "The location to copy the file or directory to"
+    }
+  },
+  "mv": {
+    "description": "Move or rename files/directories",
+    "arguments": {
+      "source": "The file or directory to move/rename",
+      "destination": "The new name or location for the file/directory"
+    }
+  },
+  "rm": {
+    "description": "Delete files (use with caution!)",
+    "arguments": {
+      "file": "The file to delete",
+      "-r": "Recursively delete directories and their contents (use with caution!)"
+    }
+  },
+  "chmod": {
+    "description": "Change file permissions",
+    "arguments": {
+      "permission_mode": "A string representing the new permissions (e.g., chmod 755 filename)"
+    }
+  },
+  "man": {
+    "description": "Get help on a specific command (e.g., man ls)",
+    "arguments": {
+      "command_name": "The name of the command you want help with"
+    }
+  },
+  "cat": {
+    "description": "Display file contents",
+    "arguments": {
+      "file": "The file to display contents for"
+    }
+  },
+  "ping": {
+    "description": "Check network connectivity",
+    "arguments": {
+      "hostname_or_IP": "The hostname or IP address to ping"
+    }
+  },
+  "ssh": {
+    "description": "Secure remote login",
+    "arguments": {
+      "username@hostname": "The username and hostname of the remote server (e.g., ssh user@server.com)"
+    }
+  },
+  "scp": {
+    "description": "Secure copy files to/from remote server",
+    "arguments": {
+      "source": "The file or directory to copy",
+      "destination": "The location to copy the file or directory to (on the remote server)"
+    }
+  },
+  "ps": {
+    "description": "List running processes",
+    "arguments": "Often used with flags like -a (show all processes) or -e (show environment variables for processes)"
+  },
+  "top": {
+    "description": "Monitor process activity",
+    "arguments": {
+      "No arguments needed, but can be used with flags for specific information"
+    }
+  },
+  "kill": {
+    "description": "Terminate a process",
+    "arguments": {
+      "process_id": "The ID of the process to terminate (use ps to find process IDs)"
+    }
+  }
+}
