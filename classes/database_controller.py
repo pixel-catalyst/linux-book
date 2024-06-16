@@ -22,15 +22,23 @@ class DatabaseController:
     def __del__(self):
         self.conn.close()
 
-    def insert_new_pair(self, key:str, value:str) -> None:
+    def insert_new_pair(self, key: str, value: str) -> None:
         self.cursor.execute("INSERT INTO maintable VALUES (?, ?)", (key, value))
         self.conn.commit()
 
-    def get_value(self, key:str) -> str:
+    def get_value(self, key: str) -> str:
+        """
+        Returns the value of a key
+        :param key:
+        :return value:
+        """
         self.cursor.execute("SELECT value FROM maintable WHERE key = ?", (key,))
-        return self.cursor.fetchone()[0]
+        try:
+            return self.cursor.fetchone()[0]
+        except Exception:
+            return None
 
-    def delete_pair(self, key:str) -> bool:
+    def delete_pair(self, key: str) -> bool:
         try:
             self.cursor.execute("DELETE FROM maintable WHERE key = ?", (key,))
             self.conn.commit()
@@ -38,8 +46,7 @@ class DatabaseController:
         except sqlite3.OperationalError:
             return False
 
-
-    def update_value(self, key:str, value:str) -> None:
+    def update_value(self, key: str, value: str) -> None:
         self.cursor.execute("UPDATE maintable SET value = ? WHERE key = ?", (value, key))
         self.conn.commit()
 
@@ -47,7 +54,7 @@ class DatabaseController:
         self.cursor.execute("SELECT key FROM maintable")
         return [row[0] for row in self.cursor.fetchall()]
 
-    def get_key_by_value(self, value:str) -> str:
+    def get_key_by_value(self, value: str) -> str:
         "Get the key of respective pair using the value as a key"
         self.cursor.execute("SELECT key FROM maintable WHERE value = ?", (value,))
         return self.cursor.fetchone()[0]

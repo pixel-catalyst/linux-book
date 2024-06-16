@@ -3,6 +3,7 @@ import sqlite3
 
 from rich import markdown
 from rich import print
+from classes.command_processor import CommandProcessor
 
 header_text = """
 # LINUX BOOK
@@ -89,57 +90,47 @@ def entry_point():
         # print("4. Delete a key-value pair")
         # print("5. Display all key-value pairs")
         # print("6. Exit")
-        print("\n\n\n[bold blue] >> [/bold blue] ", end="")
+        print("\n\n\n[bold #aa88ff] >> [/bold #aa88ff] ", end="")
         choice = input("")
 
-        if choice == "/new":
-            key = input("Enter the key: ")
-            value = input("Enter the value: ")
-            insert_key_value(key, value)
-        elif choice == "/get":
-            key = input("Enter the key: ")
-            value = get_value(key)
-            if value:
-                print(f"Value for key '{key}': {value}")
-        elif choice == "/update":
-            key = input("Enter the key: ")
-            new_value = input("Enter the new value: ")
-            update_value(key, new_value)
-        elif choice == "/delete":
-            key = input("Enter the key: ")
-            delete_key(key)
-        elif choice == "/all":
-            display_all()
-        elif choice == "/exit":
-            break
-        elif choice == "exit":
-            print(markdown.Markdown("> Did you mean `/exit` ?"))
-            print(" [bold red] >>> [/bold red] ", end="")
-            if "yes".startswith(input().lower()):
-                break
-            else:
-                continue
+        # if choice == "/new":
+        #     key = input("Enter the key: ")
+        #     value = input("Enter the value: ")
+        #     insert_key_value(key, value)
+        # elif choice == "/get":
+        #     key = input("Enter the key: ")
+        #     value = get_value(key)
+        #     if value:
+        #         print(f"Value for key '{key}': {value}")
+        # elif choice == "/update":
+        #     key = input("Enter the key: ")
+        #     new_value = input("Enter the new value: ")
+        #     update_value(key, new_value)
+        # elif choice == "/delete":
+        #     key = input("Enter the key: ")
+        #     delete_key(key)
+        # elif choice == "/all":
+        #     display_all()
+        # elif choice == "/exit":
+        #     break
+        # elif choice == "exit":
+        #     print(markdown.Markdown("> Did you mean `/exit` ?"))
+        #     print(" [bold red] >>> [/bold red] ", end="")
+        #     if "yes".startswith(input().lower()):
+        #         break
+        #     else:
+        #         continue
+        if choice != "/clear":
+            processor = CommandProcessor()
+            processor.set_expression(choice)
+            processor.interpret_command()
+
         elif choice == "/clear":
             os.system('cls' if os.name == 'nt' else 'clear')
             print(markdown.Markdown(header_text, hyperlinks=True))
 
-        elif choice == "/h":
-            help_table = markdown.Table(title="[bold #9977aa] LINUX BOOK HELP [/bold #9977aa]")
-            help_table.add_column("[bold #9977aa]COMMAND[/bold #9977aa]", style="bold ")
-            help_table.add_column("[bold]DESCRIPTION[/bold]", style="italic #9977aa")
-            help_table.add_row("/new", "Insert your own linux snippet", end_section=True)
-            help_table.add_row("/get [#9977aa]--work[/#9977aa]", "What does this command do?", end_section=True)
-            help_table.add_row("/get [#9977aa]--cmd[/#9977aa]", "Which command, is this work done by?", end_section=True)
-            help_table.add_row("/update", "Update the value of a key", end_section=True)
-            help_table.add_row("/delete", "Delete a key-value pair", end_section=True)
-            help_table.add_row("/all", "Display all key-value pairs", end_section=True)
-            help_table.add_row("/exit", "Exit the program", end_section=True)
-            help_table.add_row("/clear", "Clear the screen", end_section=True)
-            help_table.add_row("/h", "Show this help message", end_section=True)
-            print(help_table)
-
         else:
-            print("Invalid choice. Please try again.")
+            print("Some internal error occured")
 
 # Initiating entry point
 if __name__ == "__main__":
