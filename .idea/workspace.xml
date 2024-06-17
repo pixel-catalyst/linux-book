@@ -5,8 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ce391e5c-1d29-4832-b07d-17164baa648f" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/resources/commands_data.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/database.db" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/errors_catcher.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/settings.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/command_processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/classes/command_processor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes/database_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/classes/database_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands_data.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database.db" beforeDir="false" afterPath="$PROJECT_DIR$/database.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/errors_catcher.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.bin" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
