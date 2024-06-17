@@ -1,13 +1,22 @@
-import pickle
-import re
+"""
+Error template
+[red][ ⨯ ][/red] [#888888]  [/#888888]
 
+Success Template
+[green][ ✓ ][/green] [#888888] [/#888888]
+
+Log Template
+[#aa88ff][ · ][/#aa88ff] [#888888]  [/#888888]
+"""
+
+import pickle
 from rich import markdown
 import json
 from rich import print
 
 from classes.database_controller import DatabaseController
 
-error_catchers = json.load(open("./errors_catcher.json", "r"))
+error_catchers = json.load(open("./resources/errors_catcher.json", "r"))
 listen_to_commands = True
 error_listener: str = "default listener"
 settings: dict = {"listen_to_commands": False}
@@ -16,7 +25,7 @@ settings: dict = {"listen_to_commands": False}
 def load_settings():
     try:
         global settings
-        settings = pickle.load(open("settings.bin", "rb"))
+        settings = pickle.load(open("./resources/settings.bin", "rb"))
     except Exception as e:
         # print("Hmmm... seems to be your first time using this CLI :)\n let's configure some settings first")
         print("Should I learn from your mistakes? you can change it later\n >> ", end="")
@@ -46,14 +55,16 @@ class CommandProcessor:
 
     def test_error_listener(self):
         # print("Testing error listener : ", listener)
-        if error_listener != "":
+        global error_listener
+        if error_listener != "default listener":
             # print( f"\n[#aa88ff][ · ][/#aa88ff] [#888888]You previously typed {error_listener}, was it meant
             # to do what you did just now?[/#888888]")
             print("\n[#aa88ff][ · ][/#aa88ff] [#888888]I am trying to learn from you...[/#888888]")
             print(
                 f"[#aa88ff][ · ][/#aa88ff] [#888888]You previously typed `{error_listener}`, did it mean the same as `{self.prefix}`? : [/#888888]",
                 end="")
-            if input() == "y":
+            uinput = input()
+            if uinput == "y":
                 print("\n [blue]>>[/blue] Enter error remarks ( reason ) : ", end="")
                 err_type = input()
                 print(" [blue]>>[/blue] Enter suggestions to correct it : ", end="")
@@ -70,19 +81,23 @@ class CommandProcessor:
                 }
                 old_error_catchments.update(new_error_catchment)
                 json.dump(old_error_catchments, open("errors_catcher.json", "w"))
-                print("[green][ ✓ ][/green] [#888888]Added to dictionary[/#888888]")
+                print("[green][ ✓ ][/green] [#888888]Learnt and added to dictionary :)[/#888888]")
+
+            elif uinput == "n":
+                error_listener = "default listener"
+                print("[#aa88ff][ · ][/#aa88ff] [#888888]Appended to negation rules[/#888888]")
 
     @staticmethod
     def __print_help(self):
         help_table = markdown.Table(title="[bold #9977aa] LINUX BOOK HELP [/bold #9977aa]")
         help_table.add_column("[bold #9977aa]COMMAND[/bold #9977aa]", style="bold ")
         help_table.add_column("[bold]DESCRIPTION[/bold]", style="italic #9977aa")
-        help_table.add_row("/new [#9977aa]--key=<key> --val=<value>[/#9977aa]", "Insert your own linux snippet",
+        help_table.add_row("/new [#9977aa]--key --val[/#9977aa]", "Insert your own linux snippet",
                            end_section=True)
-        help_table.add_row("/get [#9977aa]--work[/#9977aa]", "What does this command do?", end_section=True)
-        help_table.add_row("/get [#9977aa]--cmd[/#9977aa]", "Which command, is this work done by?", end_section=True)
-        help_table.add_row("/update", "Update the value of a key", end_section=True)
-        help_table.add_row("/delete", "Delete a key-value pair", end_section=True)
+        help_table.add_row("/get [#9977aa]--work[/#9977aa]", "Get cmd that does this work", end_section=True)
+        help_table.add_row("/get [#9977aa]--cmd[/#9977aa]", "Get work that this cmd does", end_section=True)
+        help_table.add_row("/update [#9977aa]--where --new-val[/#9977aa]", "Update the cmd for a work", end_section=True)
+        help_table.add_row("/delete <work>", "Delete a key-value pair", end_section=True)
         help_table.add_row("/all", "Display all key-value pairs", end_section=True)
         help_table.add_row("/exit", "Exit the program", end_section=True)
         help_table.add_row("/clear", "Clear the screen", end_section=True)
@@ -105,14 +120,31 @@ class CommandProcessor:
         elif self.command.startswith("/all"):
             db_controller = DatabaseController()
             keys = db_controller.get_all_keys()
-            print(keys)
+            keys_table = markdown.Table(title="[bold #9977aa] ALL COMMANDS [/bold #9977aa]", title_style="bold")
+            keys_table.add_column("[bold #9977aa]COMMAND[/bold #9977aa]", style="bold ")
+            keys_table.add_column("[bold]DESCRIPTION[/bold]", style="italic #9977aa")
+            if len(keys) > 0 :
+                for key in keys:
+                    keys_table.add_row(key, db_controller.get_value(key)[0][1], end_section=True)
+                print(keys_table)
+            else:
+                print("No commands available")
+
+        elif self.command.startswith("/delete"):
+            db_controller = DatabaseController()
+            try:
+                db_controller.delete_pair(self.command.removeprefix("/delete").strip())
+                print(f"\n[green][ ✓ ][/green] [#888888]Deleted {self.command.removeprefix('/delete').strip()}")
+            except Exception as e:
+                print("[red][ ⨯ ][/red] [#888888]No such keys found[/#888888]")
 
         elif self.command.startswith("/clear"):
             print("\033c")
 
         elif self.command.startswith("/exit"):
             print("\n[green][ ✓ ][/green] Bye :)")
-            quit(0)
+            # quit(0)
+            exit(0)
 
         elif self.command.startswith("/get"):
             try:
@@ -121,11 +153,25 @@ class CommandProcessor:
                 db_controller.ensure_existing()
 
                 if self.command.startswith("--work"):
-                    print(db_controller.get_value(self.command.removeprefix("--work").strip()))
+                    keys = db_controller.get_value(self.command.removeprefix("--work").strip())
+                    keys_table = markdown.Table(title="[bold #9977aa] MATCHED COMMANDS [/bold #9977aa]", title_style="bold")
+                    keys_table.add_column("[bold]WORK[/bold]", style="italic #9977aa")
+                    keys_table.add_column("[bold #9977aa]COMMAND[/bold #9977aa]", style="bold ")
+                    for key in keys:
+                        keys_table.add_row(key[0], key[1], end_section=True)
+                    print(keys_table)
+
                 elif self.command.startswith("--cmd"):
-                    print(db_controller.get_key_by_value(self.command.removeprefix("--cmd").strip()))
+                    keys = db_controller.get_key_by_value(self.command.removeprefix("--cmd").strip())
+                    keys_table = markdown.Table(title="[bold #9977aa] MATCHED COMMANDS [/bold #9977aa]", title_style="bold")
+                    keys_table.add_column("[bold #9977aa]COMMAND[/bold #9977aa]", style="bold")
+                    keys_table.add_column("[bold ]WORK[/bold ]", style="italic #9977aa")
+                    for key in keys:
+                        keys_table.add_row(key[1], key[0], end_section=True)
+                    print(keys_table)
+
                 else:
-                    print("\n[red][ ⨯ ][/red] Unknown argument usage")
+                    print("\n[red][ ⨯ ][/red] Bad / Missing Argument")
 
             except IndexError as e:
                 print(
@@ -134,10 +180,15 @@ class CommandProcessor:
         elif self.command.startswith("/new"):
             self.command = self.command.removeprefix("/new").strip()
             key_start, val_start = self.command.find("--key="), self.command.find("--val=")
-            key = self.command[key_start + 6: val_start].strip()
+            key_end = val_start
+            if val_start == -1:
+                val_start = self.command.find("--value=")
+                key_end = val_start
+                val_start += 2
+            key = self.command[key_start + 6: key_end].strip()
             val = self.command[val_start + 6: len(self.command)].strip()
 
-            print(f"identified key = {key} and val = {val}")
+            print(f"\n[#aa88ff][ · ][/#aa88ff] [#888888] identified KEY = {key} | VAL = {val} [/#888888] ")
 
             if key == "" or val == "":
                 print("One or more empty values passed")
@@ -146,13 +197,37 @@ class CommandProcessor:
             db_controller = DatabaseController()
             db_controller.ensure_existing()
             db_controller.insert_new_pair(key, val)
-            print("\n[green][ ✓ ][/green] New pair added")
+            print("[green][ ✓ ][/green] [#888888]New pair added[/#888888]")
             self.test_error_listener()
 
         elif self.command.startswith("/learn"):
             global settings
             settings["listen_to_commands"] = not settings["listen_to_commands"]
             update_settings()
+
+        elif self.command.startswith("/update"):
+            where_index, value_index = self.command.find("--where="), self.command.find("--new-val=")
+            key = self.command [where_index+8: value_index].strip()
+            value = self.command[value_index+10:].strip()
+
+            if not "--where=" in self.command and "--new-val=" in self.command:
+                print("[red][ ⨯ ][/red] [#888888] Bad / Missing Arguments [/#888888]")
+                return
+
+            if key=="" or value=="":
+                print("[red][ ⨯ ][/red] [#888888] Empty Arguments [/#888888]")
+                return
+
+            try:
+                dbc = DatabaseController()
+                dbc.update_value(key, value)
+                print(f"[#aa88ff][ · ][/#aa88ff] [#888888] Setting [[ {key} = {value} ]]... [/#888888]")
+                print("[green][ ✓ ][/green] [#888888] Value Updated [/#888888]")
+
+            except Exception as e:
+                print("[red][ ⨯ ][/red] [#888888] Database Error, Could not update... [/#888888]")
+                with open("dbLogs.txt", "w") as fe:
+                    fe.write(str(e))
 
         else:
             self.__handle_error(self.command)
