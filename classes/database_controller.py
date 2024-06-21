@@ -3,7 +3,7 @@ from typing import Optional, List, Any, Union
 
 
 class DatabaseController:
-    database_path = "../resources/database.db"
+    database_path = "./resources/database.db"
     conn = None
     cursor = None
 

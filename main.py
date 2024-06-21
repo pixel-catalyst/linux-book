@@ -4,27 +4,28 @@ import sqlite3
 from rich import markdown
 from rich import print
 from classes.command_processor import CommandProcessor
+from classes.database_controller import DatabaseController
 
 header_text = """
 # LINUX BOOK
 #### By - Ashwin Sharma
 
 - A centralized collection of various "linux commands" so that you don't ever get stuck again struggling to recall 
-the right command. - Type ` /h ` for help"""
-
-# Create a new SQLite database
-conn = sqlite3.connect('database.db')
-c = conn.cursor()
-# Create a table to store key-value pairs
-c.execute('''CREATE TABLE IF NOT EXISTS keyvalue
-             (key TEXT PRIMARY KEY, value TEXT)''')
+the right command. - Type ` /h ` for help
+"""
 
 
-# Interactive interface
 def entry_point():
+
+    # Initialize database
+    dbc = DatabaseController()
+    dbc.ensure_existing()
+
+    # Clear any pre-existing clutter
     os.system('cls' if os.name == 'nt' else 'clear')
     print(markdown.Markdown(header_text, hyperlinks=True))
-    """Entry point for the interactive interface"""
+
+    # Interactive prompts here
     while True:
 
         print("\n\n\n[bold #aa88ff] >> [/bold #aa88ff] ", end="")
@@ -46,6 +47,3 @@ def entry_point():
 # Initiating entry pointsettings
 if __name__ == "__main__":
     entry_point()
-
-# Close the database connection
-conn.close()
