@@ -153,7 +153,7 @@ class CommandProcessor:
                 db_controller.ensure_existing()
 
                 if self.command.startswith("--work"):
-                    keys = db_controller.get_value(self.command.removeprefix("--work").strip())
+                    keys = db_controller.get_value(self.command.removeprefix("--work").strip().removeprefix("=").strip())
                     keys_table = markdown.Table(title="[bold #9977aa] MATCHED COMMANDS [/bold #9977aa]", title_style="bold")
                     keys_table.add_column("[bold]WORK[/bold]", style="italic #9977aa")
                     keys_table.add_column("[bold #9977aa]COMMAND[/bold #9977aa]", style="bold ")
@@ -162,7 +162,7 @@ class CommandProcessor:
                     print(keys_table)
 
                 elif self.command.startswith("--cmd"):
-                    keys = db_controller.get_key_by_value(self.command.removeprefix("--cmd").strip())
+                    keys = db_controller.get_key_by_value(self.command.removeprefix("--cmd").strip().removeprefix("=").strip())
                     keys_table = markdown.Table(title="[bold #9977aa] MATCHED COMMANDS [/bold #9977aa]", title_style="bold")
                     keys_table.add_column("[bold #9977aa]COMMAND[/bold #9977aa]", style="bold")
                     keys_table.add_column("[bold ]WORK[/bold ]", style="italic #9977aa")
@@ -179,14 +179,14 @@ class CommandProcessor:
 
         elif self.command.startswith("/new"):
             self.command = self.command.removeprefix("/new").strip()
-            key_start, val_start = self.command.find("--key="), self.command.find("--val=")
+            key_start, val_start = self.command.find("--key"), self.command.find("--val")
             key_end = val_start
             if val_start == -1:
                 val_start = self.command.find("--value=")
                 key_end = val_start
                 val_start += 2
-            key = self.command[key_start + 6: key_end].strip()
-            val = self.command[val_start + 6: len(self.command)].strip()
+            key = self.command[key_start + 5: key_end].strip()
+            val = self.command[val_start + 5: len(self.command)].strip()
 
             print(f"\n[#aa88ff][ · ][/#aa88ff] [#888888] identified KEY = {key} | VAL = {val} [/#888888] ")
 
