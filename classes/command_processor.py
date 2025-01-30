@@ -61,7 +61,7 @@ class CommandProcessor:
             # to do what you did just now?[/#888888]")
             print("\n[#aa88ff][ · ][/#aa88ff] [#888888]I am trying to learn from you...[/#888888]")
             print(
-                f"[#aa88ff][ · ][/#aa88ff] [#888888]You previously typed `{error_listener}`, did it mean the same as `{self.prefix}`? : [/#888888]",
+                f"[#aa88ff][ · ][/#aa88ff] [#888888]You previously typed `{error_listener}`, did it mean the same as `{self.command}`? : [/#888888]",
                 end="")
             uinput = input()
             if uinput == "y":
@@ -80,7 +80,7 @@ class CommandProcessor:
                     }
                 }
                 old_error_catchments.update(new_error_catchment)
-                json.dump(old_error_catchments, open("errors_catcher.json", "w"))
+                json.dump(old_error_catchments, open("./resources/errors_catcher.json", "w"))
                 print("[green][ ✓ ][/green] [#888888]Learnt and added to dictionary :)[/#888888]")
 
             elif uinput == "n":
