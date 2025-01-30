@@ -1,6 +1,8 @@
 # Linux Book
 #### A Utilitiy designed on CLI for Linux users who get stuck in complex commands or want an interactive and helpful documentation of the linux commands.
 
+[View Developer Docs](./developer.md)
+
 ### With this CLI Utility
 - Interactively power-search commands by their subsets or by the work you want to be done
 - Maintain your own database copy that comes with a preloaded set of commands but can be customized by you completely
