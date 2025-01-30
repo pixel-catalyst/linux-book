@@ -43,11 +43,13 @@ Refer to the `resources/commands_data.json` file for detailed descriptions of ea
 flowchart TD
     A[User Input] --> B{Command Valid?}
     B -- Yes --> C[Process Command]
-    B -- No --> D[Suggest Correction]
+    B -- No --> Z{Correctable?}
+	Z -- No --> GG[Promp Error & No Suggestion] 
+	Z -- Yes --> D[Suggest Correction]
     D --> E[User Accepts Correction?]
     E -- Yes --> C
     E -- No --> F[Ignore Command]
     C --> G[Update Database]
     G --> H[Display Result]
 ```
-![alt text](image.png)
+![alt text](image-1.png)
