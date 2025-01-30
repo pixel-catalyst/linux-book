@@ -70,7 +70,7 @@ class CommandProcessor:
                 print(" [blue]>>[/blue] Enter suggestions to correct it : ", end="")
                 corr = input()
 
-                with open("errors_catcher.json", "r") as f:
+                with open("./resources/errors_catcher.json", "r") as f:
                     old_error_catchments: dict = json.load(f)
                 new_error_catchment = {
                     error_listener: {

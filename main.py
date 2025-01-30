@@ -1,5 +1,4 @@
 import os
-import sqlite3
 
 from rich import markdown
 from rich import print
@@ -13,7 +12,6 @@ header_text = """
 - A centralized collection of various "linux commands" so that you don't ever get stuck again struggling to recall 
 the right command. - Type ` /h ` for help
 """
-
 
 def entry_point():
 
