@@ -23,3 +23,7 @@
 2. Fix : Library not found
 - Option 1 : `pip install -r requirements.txt`
 - Option 2 : switch to python3.9 and repeat option 1
+
+3. Fix : No Launch
+- Clear Cache
+- Reinstall
